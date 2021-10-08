@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 public class PersistenceFactory implements Serializable {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("ecommercePU");
-    
+     
     @Produces
     public EntityManager getEntityManager(){
         EntityManager em = emf.createEntityManager();
