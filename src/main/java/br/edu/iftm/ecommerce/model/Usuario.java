@@ -19,16 +19,16 @@ import javax.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
+// do msm jeitin viu? 
 @Entity
 @Table(name="usuario")
-@Getter @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter @Setter //
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) //
 public class Usuario implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @Id //o EqualsAndHashCode dependem de um ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//
+    @EqualsAndHashCode.Include //
     private Integer id;
     private String nome;
     private String sobrenome;
