@@ -2,6 +2,7 @@ package br.edu.iftm.ecommerce.bean;
 
 import br.edu.iftm.ecommerce.logic.CrudLogic;
 import br.edu.iftm.ecommerce.model.Cliente;
+import br.edu.iftm.ecommerce.model.Produto;
 import br.edu.iftm.ecommerce.util.JSFUtil;
 import br.edu.iftm.ecommerce.util.exception.ErroNegocioException;
 import br.edu.iftm.ecommerce.util.exception.ErroSistemaException;
@@ -89,6 +90,8 @@ public abstract class CrudBean<E, L extends CrudLogic<E>> extends JSFUtil{
         } 
     }
     
+    
+    
     public void buscar() {
         if(!EstadoDaTela.BUSCAR.equals(this.estadoDaTela)){
             this.estadoDaTela = EstadoDaTela.BUSCAR;
@@ -132,5 +135,6 @@ public abstract class CrudBean<E, L extends CrudLogic<E>> extends JSFUtil{
     public abstract L getLogic();
     
     
+   
     
 }

@@ -16,16 +16,12 @@ public class InfoBean extends JSFUtil {
     private UsuarioLogic logic;
     
     public InfoBean(){
-        System.out.println("###############################");
-        System.out.println("Construtor InfoBean");
         boolean existe = logic != null;
         System.out.println("Logic: " + existe);
     }
     
     @PostConstruct
     public void init(){
-        System.out.println("###############################");
-        System.out.println("PostConstruct InfoBean");
         boolean existe = logic != null;
         System.out.println("Logic: " + existe);
     }

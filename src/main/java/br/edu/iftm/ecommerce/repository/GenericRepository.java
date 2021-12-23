@@ -9,6 +9,7 @@ import lombok.Getter;
 public class GenericRepository<E, ID extends Serializable> implements Serializable {
     
     @Inject
+    @Getter
     private EntityManager entityManager;
     
     @Getter

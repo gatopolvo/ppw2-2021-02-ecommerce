@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="template.xhtml"
+                xmlns:ec="http://xmlns.jcp.org/jsf/composite/ec">
+
+    <h:form>
+        <h1>Gerenciar Vendas</h1>
+        <ec:toolbarCrud crudBean="#{vendaBean}">
+            <p:commandButton value="Cancelar" icon="fas fa-ban" actionListener="#{vendaBean.cancelarVenda()}"
+                             update="@form" rendered="#{vendaBean.estadoDaTela.name() == 'ATUALIZAR'}"
+                             >
+            <p:confirm header="Confirma" message="Tem certeza que deseja cancelar?" icon="pi pi-info-circle" />
+        
+            </p:commandButton>
+        </ec:toolbarCrud>
+        <p:spacer height="50px"></p:spacer>
+        <p:panel header="">
+            <p:panelGrid columns="2" rendered="#{vendaBean.estadoDaTela.name() != 'BUSCAR'}">
+
+
+                <p:outputLabel value="Cliente"></p:outputLabel>
+                <p:selectOneMenu value="#{vendaBean.entidade.cliente}" converter="clienteConverter">
+                    <f:selectItem itemLabel="Selecione"></f:selectItem>
+                    <f:selectItems value="#{vendaBean.clientes}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente}"></f:selectItems>
+                    <p:ajax event="change" update="selecionaEndereco"></p:ajax>
+                </p:selectOneMenu>
+                <p:outputLabel value="Endereço entrega"></p:outputLabel>
+                <p:selectOneMenu id="selecionaEndereco" value="#{vendaBean.entidade.enderecoEntrega}" disabled="#{vendaBean.entidade.cliente == null}" converter="enderecoConverter">
+                    <f:selectItem itemLabel="#{vendaBean.entidade.cliente == null?'Selecione o cliente':'Selecione'}"></f:selectItem>
+                    <f:selectItems value="#{vendaBean.entidade.cliente.enderecos}" var="endereco" 
+                                   itemLabel="#{endereco.logradouro}, #{endereco.numero}, #{endereco.cidade}" 
+                                   itemValue="#{endereco}" rendered="#{vendaBean.entidade.cliente == null}"></f:selectItems>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Descrição Interna"></p:outputLabel>
+                <p:inputTextarea></p:inputTextarea>
+
+            </p:panelGrid>
+
+            <p:fieldset legend="Produtos" rendered="#{vendaBean.estadoDaTela.name() != 'BUSCAR'}">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="Produto"></p:outputLabel>
+                    <p:selectOneMenu value="#{vendaBean.produtoSelecionado}" converter="produtoConverter">
+                        <f:selectItem itemLabel="Selecione"></f:selectItem>
+                        <f:selectItems value="#{vendaBean.produtos}" var="produto" itemLabel="#{produto.nome} - #{produto.marca.nome}" itemValue="#{produto}"></f:selectItems>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Quantidade"></p:outputLabel>
+                    <p:inputNumber decimalPlaces="0" value="#{vendaBean.quantidade}"></p:inputNumber>
+                    <p:outputLabel value="Quantidade"></p:outputLabel>
+                    <p:commandButton value="Adicionar Produto" icon="fas fa-plus" update="@form" actionListener="#{vendaBean.adicionarProduto()}"></p:commandButton>
+                </p:panelGrid>
+                <p:dataTable value="#{vendaBean.entidade.itensVenda}" var="item">
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{item.produto.nome}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{item.valor}">
+                            <f:convertNumber type="currency"></f:convertNumber>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Quantidade">
+                        <h:outputText value="#{item.quantidade}">
+                            <f:convertNumber></f:convertNumber>
+                        </h:outputText>
+                    </p:column>
+                    
+    <!--            <p:column headerText="">
+                    <p:commandButton  update="@form" actionListener="#{vendaBean.removerProduto(item)}" icon="fas fa-trash">
+                        <p:confirm header="Confirma" message="Tem certeza que deseja deletar?" icon="pi pi-info-circle"/>
+                    </p:commandButton></p:column> -->
+                    
+                    
+
+                </p:dataTable>
+
+
+
+
+
+
+            </p:fieldset>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" />
+            </p:confirmDialog>
+
+            <p:dataTable value="#{vendaBean.entidades}" var="entidade" rendered="#{vendaBean.estadoDaTela.name() == 'BUSCAR'}">
+
+                <p:column>
+                    <p:commandButton actionListener="#{vendaBean.remover(entidade)}" update="@form" icon="fas fa-trash">
+                        <p:confirm header="Confirma" message="Tem certeza que deseja deletar?" icon="pi pi-info-circle"/>
+                    </p:commandButton>
+                    <p:commandButton actionListener="#{vendaBean.editar(entidade)}" update="@form" icon="pi pi-pencil"></p:commandButton>
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{entidade.cliente.nome}"></h:outputText>
+                </p:column>
+                <p:column headerText="Valor">
+                    <h:outputText value="#{vendaBean.total(entidade)}">
+                        <f:convertNumber type="currency"></f:convertNumber>
+                    </h:outputText>
+                </p:column>
+
+
+            </p:dataTable>
+
+        </p:panel>
+    </h:form>
+
+</ui:composition>
+
